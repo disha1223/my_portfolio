@@ -9,9 +9,11 @@ const PROJECTS = [
     eyebrow: 'DISCOVERY, REDESIGNED.',
     title: 'Smart Nearby — Web',
     description:
-      'A full-stack MERN app that gives mood-based place recommendations using real-time location. Secure REST APIs with JWT auth, SerpAPI-powered location data, and intelligent filtering — deployed on AWS EC2.',
-    stack: ['React.js', 'Node.js', 'Express.js', 'MongoDB Atlas', 'AWS EC2'],
+      'Full-stack MERN application that recommends nearby places based on the users mood, location, and budget. Built secure JWT authentication, real-time location services, MongoDB-powered favourites, and integrated SerpAPI for intelligent place discovery. Includes a cross-platform React Native app and AWS EC2 deployment.',
+    stack: ['React.js', 'Node.js', 'Express.js', 'MongoDB Atlas', 'AWS EC2','JWT','SerpApi'],
     image: '/images/webi.jpg',
+    github: 'https://github.com/disha1223/smart-nearby-web',
+    demo: null,
   },
   {
     tag: 'MOBILE APP',
@@ -19,9 +21,11 @@ const PROJECTS = [
     eyebrow: 'MOOD-FIRST NAVIGATION.',
     title: 'Smart Nearby — Mobile',
     description:
-      'Built with React Native and Expo Router, offering 11 mood-based place discovery categories, GPS search, dark/light themes, and favourites — with search history persisted via AsyncStorage.',
-    stack: ['React Native', 'TypeScript', 'Tailwind CSS', 'REST APIs'],
+      'Cross-platform React Native application that recommends nearby places based on users mood and real-time location. Features secure JWT authentication, GPS-powered place discovery, MongoDB-backed favourites, and SerpAPI integration for personalized recommendations.',
+    stack: ['React Native','Expo', 'TypeScript', 'Node.js','Express.js', 'MongoDB','JWT Authentication', 'REST APIs'],
     image: '/images/mob.jpg',
+    github: 'https://github.com/disha1223/smart-nearby-mobile',
+    demo: null,
   },
   {
     tag: 'DATA / ML',
@@ -29,9 +33,11 @@ const PROJECTS = [
     eyebrow: 'PREDICTION, VALIDATED.',
     title: 'Depression Prediction ML Models',
     description:
-      'Evaluated 5+ models — Random Forest, SVM, XGBoost — for depression prediction. Applied SMOTE and feature selection, lifting accuracy from 68% to 86% through careful preprocessing and k-fold validation.',
-    stack: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost'],
+      'Built and compared 5+ ML models — Random Forest, Logistic Regression, SVM, XGBoost, and CatBoost — to predict depression severity from survey data. Applied SMOTE for class balancing, SelectKBest for feature selection, and k-fold cross-validation to improve accuracy from 68% to 94%.',
+    stack: ['Python', 'Pandas', 'Scikit-learn', 'XGBoost', 'CatBoost', 'Jupyter'],
     image: '/images/ML.jpg',
+    github: 'https://github.com/disha1223/Depression-ML-',
+    demo: null,
   },
   {
     tag: 'FULL-STACK',
@@ -42,6 +48,8 @@ const PROJECTS = [
       'An attendance management system handling 500+ student records. Implements CRUD operations, relational database design, and role-based access control, with SQL indexing and JOINs for fast retrieval.',
     stack: ['Python', 'MySQL'],
     image: '/images/student.jpg',
+    github: 'https://github.com/disha1223',
+    demo: null,
   },
 ]
 
@@ -63,7 +71,6 @@ export default function Projects() {
               Projects, <span className="italic text-rose">crafted</span> with care.
             </h2>
           </div>
-          
         </div>
 
         <div className="flex gap-2 mb-10">
@@ -122,14 +129,18 @@ export default function Projects() {
                 </div>
 
                 <div className="flex gap-3">
+                  {p.demo && (
+                    <a
+                      href={p.demo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-rose hover:bg-rose-dark text-white text-sm font-medium px-5 py-3 transition-all hover:-translate-y-0.5"
+                    >
+                      Live Demo ↗
+                    </a>
+                  )}
                   <a
-                    href="#"
-                    className="inline-flex items-center gap-2 rounded-full bg-rose hover:bg-rose-dark text-white text-sm font-medium px-5 py-3 transition-all hover:-translate-y-0.5"
-                  >
-                    Live Demo ↗
-                  </a>
-                  <a
-                    href="https://github.com/disha1223"
+                    href={p.github}
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-2 rounded-full border border-ink/15 hover:border-rose/40 hover:text-rose text-ink text-sm font-medium px-5 py-3 transition-colors"
