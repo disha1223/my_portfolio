@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+
 const GROUPS = [
   {
     title: 'Languages',
@@ -17,9 +20,62 @@ const GROUPS = [
   },
   {
     title: 'Core Concepts',
-    items: ['DSA','OOP', 'DBMS', 'Operating Systems', 'Computer Networks', 'REST APIs'],
+    items: ['OOP', 'DBMS', 'Operating Systems', 'Computer Networks', 'REST APIs'],
   },
 ]
+
+// pick a small pseudo-random offset per chip so they fly in from scattered directions
+function randomOffset(seed) {
+  const angle = (seed * 137.5) % 360
+  const rad = (angle * Math.PI) / 180
+  const distance = 60 + (seed % 3) * 20
+  return {
+    x: Math.cos(rad) * distance,
+    y: Math.sin(rad) * distance,
+    rotate: (seed % 2 === 0 ? 1 : -1) * (20 + (seed % 4) * 8),
+  }
+}
+
+function SkillChip({ item, index }) {
+  const offset = randomOffset(index + 1)
+
+  return (
+    <motion.span
+      initial={{ opacity: 0, x: offset.x, y: offset.y, rotate: offset.rotate, scale: 0.4 }}
+      whileInView={{ opacity: 1, x: 0, y: 0, rotate: 0, scale: 1 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{
+        delay: index * 0.06,
+        type: 'spring',
+        stiffness: 260,
+        damping: 14,
+      }}
+      className="inline-block"
+    >
+      <motion.span
+        animate={{
+          y: [0, -3, 0],
+          rotate: [0, index % 2 === 0 ? 1.5 : -1.5, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 2.6 + (index % 3) * 0.5,
+          ease: 'easeInOut',
+          delay: 0.8 + index * 0.06,
+        }}
+        whileHover={{
+          scale: 1.08,
+          background: 'linear-gradient(135deg, #E85D9C, #FF8CBB)',
+          color: '#fff',
+          boxShadow: '0 8px 20px -6px rgba(232, 93, 156, 0.5)',
+        }}
+        className="inline-block rounded-full bg-white/70 px-3.5 py-1.5 text-xs text-ink/70 cursor-default transition-colors"
+      >
+        {item}
+      </motion.span>
+    </motion.span>
+  )
+}
 
 export default function Skills() {
   return (
@@ -35,23 +91,22 @@ export default function Skills() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {GROUPS.map((g) => (
-            <div
+          {GROUPS.map((g, gi) => (
+            <motion.div
               key={g.title}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: gi * 0.08 }}
               className="glass rounded-2xl p-6 hover:-translate-y-1 hover:shadow-lg hover:shadow-rose/10 transition-all duration-300"
             >
               <h3 className="font-display text-xl text-ink mb-4">{g.title}</h3>
               <div className="flex flex-wrap gap-2">
-                {g.items.map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-full bg-white/70 px-3.5 py-1.5 text-xs text-ink/70 hover:bg-rose hover:text-white transition-colors cursor-default"
-                  >
-                    {item}
-                  </span>
+                {g.items.map((item, i) => (
+                  <SkillChip key={item} item={item} index={i} />
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

@@ -1,4 +1,6 @@
+import { motion } from 'framer-motion'
 import PinIcon from './PinIcon'
+import TypewriterText from './TypewriterText'
 
 const BADGES = [
   { label: 'React Native', top: '6%', left: '2%', delay: '0s' },
@@ -23,18 +25,25 @@ export default function Hero() {
             Open to software developer roles
           </span>
 
-          <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-[3.6rem] leading-[1.05] text-ink text-balance">
+          <motion.h1
+            initial={{ opacity: 0, x: -60 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-6 font-display text-5xl sm:text-6xl lg:text-[3.6rem] leading-[1.05] text-ink text-balance"
+          >
             Hi, I'm <span className="italic text-rose font-medium">Disha.</span>
-          </h1>
+          </motion.h1>
 
           <p className="mt-4 font-body text-lg text-ink/70 flex flex-wrap items-center gap-x-3 gap-y-1">
             Software Developer <span className="w-1.5 h-1.5 rounded-full bg-rose inline-block" /> CS Undergrad @ Manipal
           </p>
 
-          <p className="mt-5 max-w-xl text-ink/60 leading-relaxed">
-             A Computer Science undergrad who enjoys building full-stack products and
-  training ML models — comfortable across Python, Node.js, MongoDB, and AWS.
-  Currently interning as a Software Developer at Aroha Group
+          <p className="mt-5 max-w-xl min-h-[6.5rem] sm:min-h-[4.5rem] text-ink/60 leading-relaxed">
+            <TypewriterText
+              text="I build location-aware, mood-driven products with React, React Native and Node.js — from GPS-based discovery apps to ML models that turn raw data into decisions. Currently interning at Aroha Group, shipping cross-platform mobile experiences."
+              speed={14}
+              startDelay={600}
+            />
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -50,7 +59,7 @@ export default function Hero() {
               <span aria-hidden>↘</span>
             </a>
             <a
-              href="/FIN.pdf"
+              href="/resume.pdf"
               download
               className="inline-flex items-center gap-2 rounded-full border border-ink/15 hover:border-rose/40 hover:text-rose text-ink font-medium px-6 py-3.5 transition-colors"
             >

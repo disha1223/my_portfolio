@@ -1,10 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import PinIcon from './PinIcon'
 
-// Get a free key at https://console.groq.com/keys — paste it below.
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY
 const GROQ_MODEL = 'llama-3.3-70b-versatile'
-// Context the assistant will answer from — keep this in sync with your resume/projects.
+
 const PORTFOLIO_CONTEXT = `
 You are answering questions on behalf of Disha PV, a Computer Science undergrad
 at Manipal Institute of Technology (2023–2027), currently a Software Developer
@@ -51,6 +50,7 @@ const SUGGESTIONS = [
 ]
 
 export default function AskAI() {
+  const [open, setOpen] = useState(false)
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
@@ -70,7 +70,6 @@ export default function AskAI() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
   }, [messages, loading])
 
-  // set up speech recognition once, if the browser supports it
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SpeechRecognition) {
@@ -178,129 +177,146 @@ export default function AskAI() {
     }
   }
 
+  // ── Collapsed pill ──────────────────────────────────────────────────────────
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="fixed bottom-5 right-5 z-40 flex items-center gap-2.5 bg-[#1A1523] hover:bg-[#241c30] text-white rounded-full px-4 py-2.5 shadow-2xl shadow-black/40 transition-colors duration-200"
+      >
+        <span className="grid place-items-center w-6 h-6 rounded-full bg-rose text-white shrink-0">
+          <PinIcon className="w-3.5 h-3.5" />
+        </span>
+        <span className="text-xs font-medium">Ask about Disha</span>
+        <span className="text-white/40 text-xs ml-0.5">↑</span>
+      </button>
+    )
+  }
+
+  // ── Expanded panel ──────────────────────────────────────────────────────────
   return (
-    <section id="ask-ai" className="relative py-24 px-4 sm:px-6">
-      <div className="mx-auto max-w-4xl">
-        <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-2 rounded-full bg-panel px-4 py-1.5 text-xs font-mono text-rose-dark">
-            ASK ABOUT ME
+    <div className="fixed bottom-5 right-5 z-40 w-[calc(100vw-3rem)] sm:w-72 max-w-sm">
+      <div className="bg-[#1A1523] rounded-3xl shadow-2xl shadow-black/40 overflow-hidden flex flex-col max-h-[22rem]">
+        {/* Header — click to collapse */}
+        <button
+          onClick={() => setOpen(false)}
+          className="flex items-center gap-2 px-5 py-4 border-b border-white/10 bg-white/5 w-full text-left hover:bg-white/10 transition-colors"
+        >
+          <span className="grid place-items-center w-8 h-8 rounded-full bg-rose text-white shrink-0">
+            <PinIcon className="w-4 h-4" />
           </span>
-          <h2 className="mt-5 font-display text-4xl sm:text-5xl text-ink text-balance">
-            Curious about <span className="italic text-rose">Disha?</span>
-          </h2>
-          <p className="mt-4 text-ink/60 max-w-lg mx-auto">
-            Ask anything — projects, skills, experience, education. My portfolio
-            assistant has the answers.
-          </p>
-        </div>
-
-        <div className="glass rounded-[2rem] p-6 sm:p-8 shadow-lg shadow-rose/5">
-          <div
-            ref={scrollRef}
-            className="h-80 overflow-y-auto space-y-4 pr-2 mb-5"
-          >
-            {messages.map((m, i) => (
-              <div
-                key={i}
-                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                    m.role === 'user'
-                      ? 'bg-rose text-white rounded-br-sm'
-                      : 'bg-white/80 text-ink rounded-bl-sm'
-                  }`}
-                >
-                  {m.role === 'assistant' && (
-                    <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-rose-dark mb-1">
-                      <PinIcon className="w-2.5 h-2.5" /> ASSISTANT
-                    </span>
-                  )}
-                  <p className={m.role === 'assistant' ? 'mt-0.5' : ''}>{m.text}</p>
-                </div>
-              </div>
-            ))}
-            {loading && (
-              <div className="flex justify-start">
-                <div className="bg-white/80 rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce" />
-                </div>
-              </div>
-            )}
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-sm text-white leading-tight">Ask about Disha</p>
+            <p className="text-[10px] font-mono text-white/50">Projects · Skills · Experience</p>
           </div>
+          <span className="text-white/30 text-xs shrink-0">↓</span>
+        </button>
 
-          {messages.length <= 1 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => sendMessage(s)}
-                  className="rounded-full bg-white/70 hover:bg-rose hover:text-white px-3.5 py-1.5 text-xs text-ink/70 transition-colors"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          )}
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault()
-              sendMessage(input)
-            }}
-            className="flex gap-3"
-          >
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={listening ? 'Listening...' : 'Ask something about my work...'}
-              className="flex-1 rounded-full bg-white/70 border border-white px-5 py-3 text-sm text-ink placeholder:text-ink/30 focus:border-rose outline-none transition-colors"
-            />
-            {voiceSupported && (
-              <button
-                type="button"
-                onClick={toggleListening}
-                title={listening ? 'Stop listening' : 'Speak your question'}
-                className={`grid place-items-center w-11 h-11 rounded-full text-lg transition-colors shrink-0 ${
-                  listening
-                    ? 'bg-rose text-white animate-pulse'
-                    : 'bg-white/70 text-ink/60 hover:bg-rose hover:text-white'
+        <div
+          ref={scrollRef}
+          className="flex-1 overflow-y-auto space-y-3 px-4 py-4 min-h-[8rem]"
+        >
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs leading-relaxed ${
+                  m.role === 'user'
+                    ? 'bg-rose text-white rounded-br-sm'
+                    : 'bg-white/80 text-ink rounded-bl-sm'
                 }`}
               >
-                🎤
-              </button>
-            )}
-            <button
-              type="button"
-              onClick={() => {
-                setVoiceOn((v) => !v)
-                if (voiceOn) window.speechSynthesis?.cancel()
-              }}
-              title={voiceOn ? 'Mute voice replies' : 'Enable voice replies'}
-              className={`grid place-items-center w-11 h-11 rounded-full text-lg transition-colors shrink-0 ${
-                voiceOn
-                  ? 'bg-white/70 text-ink/60 hover:bg-rose hover:text-white'
-                  : 'bg-ink/10 text-ink/30'
-              }`}
-            >
-              {voiceOn ? '🔊' : '🔇'}
-            </button>
-            <button
-              type="submit"
-              disabled={loading || !input.trim()}
-              className="rounded-full bg-rose hover:bg-rose-dark text-white text-sm font-medium px-6 py-3 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
-            >
-              Ask
-            </button>
-          </form>
-
-          {error && (
-            <p className="mt-3 text-xs text-red-500 font-mono">{error}</p>
+                {m.role === 'assistant' && (
+                  <span className="inline-flex items-center gap-1.5 text-[9px] font-mono text-rose-dark mb-1">
+                    <PinIcon className="w-2.5 h-2.5" /> ASSISTANT
+                  </span>
+                )}
+                <p className={m.role === 'assistant' ? 'mt-0.5' : ''}>{m.text}</p>
+              </div>
+            </div>
+          ))}
+          {loading && (
+            <div className="flex justify-start">
+              <div className="bg-white/80 rounded-2xl rounded-bl-sm px-3.5 py-2.5 flex gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce [animation-delay:-0.3s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce [animation-delay:-0.15s]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-rose/50 animate-bounce" />
+              </div>
+            </div>
           )}
         </div>
+
+        {messages.length <= 1 && (
+          <div className="flex flex-wrap gap-1.5 px-4 pb-2">
+            {SUGGESTIONS.map((s) => (
+              <button
+                key={s}
+                onClick={() => sendMessage(s)}
+                className="rounded-full bg-white/70 hover:bg-rose hover:text-white px-3 py-1 text-[10px] text-ink/70 transition-colors"
+              >
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            sendMessage(input)
+          }}
+          className="flex gap-2 px-4 py-3 border-t border-white/10 bg-white/5"
+        >
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={listening ? 'Listening...' : 'Ask something...'}
+            className="flex-1 min-w-0 rounded-full bg-white/80 border border-white px-4 py-2 text-xs text-ink placeholder:text-ink/30 focus:border-rose outline-none transition-colors"
+          />
+          {voiceSupported && (
+            <button
+              type="button"
+              onClick={toggleListening}
+              title={listening ? 'Stop listening' : 'Speak your question'}
+              className={`grid place-items-center w-9 h-9 rounded-full text-sm transition-colors shrink-0 ${
+                listening
+                  ? 'bg-rose text-white animate-pulse'
+                  : 'bg-white/70 text-ink/60 hover:bg-rose hover:text-white'
+              }`}
+            >
+              🎤
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={() => {
+              setVoiceOn((v) => !v)
+              if (voiceOn) window.speechSynthesis?.cancel()
+            }}
+            title={voiceOn ? 'Mute voice replies' : 'Enable voice replies'}
+            className={`grid place-items-center w-9 h-9 rounded-full text-sm transition-colors shrink-0 ${
+              voiceOn
+                ? 'bg-white/70 text-ink/60 hover:bg-rose hover:text-white'
+                : 'bg-ink/10 text-ink/30'
+            }`}
+          >
+            {voiceOn ? '🔊' : '🔇'}
+          </button>
+          <button
+            type="submit"
+            disabled={loading || !input.trim()}
+            className="rounded-full bg-rose hover:bg-rose-dark text-white text-xs font-medium px-4 py-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+          >
+            Ask
+          </button>
+        </form>
+
+        {error && (
+          <p className="px-4 pb-3 text-[10px] text-red-500 font-mono">{error}</p>
+        )}
       </div>
-    </section>
+    </div>
   )
 }

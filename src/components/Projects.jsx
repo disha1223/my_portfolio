@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import PinIcon from './PinIcon'
 
 const PROJECTS = [
@@ -53,16 +54,16 @@ export default function Projects() {
   return (
     <section id="projects" className="relative py-24 px-4 sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-14">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-14">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-panel px-4 py-1.5 text-xs font-mono text-rose-dark">
               SELECTED WORK
             </span>
-           <h2 className="mt-5 font-display text-5xl sm:text-6xl text-ink text-balance">
-  Projects, <span className="italic text-rose">crafted</span> with care.
-</h2>
+            <h2 className="mt-5 font-display text-4xl sm:text-5xl text-ink text-balance">
+              Projects, <span className="italic text-rose">crafted</span> with care.
+            </h2>
           </div>
-         
+          
         </div>
 
         <div className="flex gap-2 mb-10">
@@ -81,8 +82,12 @@ export default function Projects() {
 
         <div className="space-y-8">
           {visible.map((p, i) => (
-            <div
+            <motion.div
               key={p.title}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
               className="group grid lg:grid-cols-[1fr_1fr] gap-0 rounded-[2rem] overflow-hidden glass shadow-lg shadow-rose/5 hover:shadow-xl hover:shadow-rose/15 transition-shadow duration-500"
             >
               <div
@@ -133,7 +138,7 @@ export default function Projects() {
                   </a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
