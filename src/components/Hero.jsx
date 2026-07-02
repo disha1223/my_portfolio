@@ -1,14 +1,7 @@
 import { motion } from 'framer-motion'
 import PinIcon from './PinIcon'
 import TypewriterText from './TypewriterText'
-
-const BADGES = [
-  { label: 'React Native', top: '6%', left: '2%', delay: '0s' },
-  { label: 'TypeScript', top: '14%', right: '0%', delay: '0.6s' },
-  { label: 'MongoDB', top: '68%', right: '4%', delay: '1.1s' },
-  { label: 'Node.js', top: '78%', left: '0%', delay: '1.6s' },
-  { label: 'AWS EC2', top: '42%', left: '-4%', delay: '2.1s' },
-]
+import PhoneShowcase from './PhoneShowcase'
 
 export default function Hero() {
   return (
@@ -84,37 +77,8 @@ export default function Hero() {
         </div>
 
         {/* right visual */}
-        <div className="relative">
-          <div className="relative mx-auto max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl shadow-rose/20 bg-gradient-to-br from-panel to-rose-light/30">
-            <img
-              src="/images/me.jpeg"
-              alt="Disha PV"
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            {/* subtle code-panel decoration, echoes reference's "code overlay" */}
-            <div className="absolute top-4 left-4 glass rounded-xl px-3 py-2 text-[10px] font-mono text-ink/50 leading-tight">
-              function develop() {'{'}<br />
-              &nbsp;&nbsp;passion, coffee<br />
-              {'}'}
-            </div>
-          </div>
-
-          {/* floating pin badges */}
-          {BADGES.map((b) => (
-            <div
-              key={b.label}
-              className="absolute hidden sm:flex items-center gap-1.5 glass rounded-full px-3.5 py-2 text-xs font-medium text-ink shadow-lg animate-bob"
-              style={{ top: b.top, left: b.left, right: b.right, animationDelay: b.delay }}
-            >
-              <PinIcon className="w-3 h-3 text-rose" />
-              {b.label}
-            </div>
-          ))}
-
-          <div className="absolute -bottom-6 -left-4 sm:left-4 glass rounded-2xl px-5 py-4 shadow-xl animate-drop" style={{ animationDelay: '0.3s' }}>
-            <p className="font-display text-2xl text-rose">3+</p>
-            <p className="text-[11px] font-mono text-ink/50 uppercase tracking-wide">yrs building</p>
-          </div>
+        <div className="relative animate-fadeUp" style={{ animationDelay: '0.2s' }}>
+          <PhoneShowcase />
         </div>
       </div>
     </section>
