@@ -103,11 +103,7 @@ npm run preview
 
 ---
 
-## 📸 Preview
 
-Add screenshots or a GIF of your portfolio here.
-
----
 
 ## 📄 Resume
 
